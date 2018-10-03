@@ -7,8 +7,8 @@ from utils import batchnize_dataset
 # dataset parameters
 tf.flags.DEFINE_string("task_name", "pos", "task name")
 tf.flags.DEFINE_string("language", "english", "language")  # used for inference, indicated the source language
-tf.flags.DEFINE_string("raw_path", "data/raw/conll2003/raw", "path to raw dataset")
-tf.flags.DEFINE_string("save_path", "data/dataset/conll2003/pos", "path to save dataset")
+tf.flags.DEFINE_string("raw_path", "../data", "path to raw dataset")
+tf.flags.DEFINE_string("save_path", "data/dataset/ud_gum", "path to save dataset")
 tf.flags.DEFINE_string("glove_name", "6B", "glove embedding name")
 tf.flags.DEFINE_boolean("char_lowercase", True, "char lowercase")
 # glove embedding path
@@ -16,11 +16,11 @@ glove_path = os.path.join(os.path.expanduser('~'), "utilities", "embeddings", "g
 tf.flags.DEFINE_string("glove_path", glove_path, "glove embedding path")
 
 # dataset for train, validate and test
-tf.flags.DEFINE_string("vocab", "data/dataset/conll2003/pos/vocab.json", "path to the word and tag vocabularies")
-tf.flags.DEFINE_string("train_set", "data/dataset/conll2003/pos/train.json", "path to the training datasets")
-tf.flags.DEFINE_string("dev_set", "data/dataset/conll2003/pos/dev.json", "path to the development datasets")
-tf.flags.DEFINE_string("test_set", "data/dataset/conll2003/pos/test.json", "path to the test datasets")
-tf.flags.DEFINE_string("pretrained_emb", "data/dataset/conll2003/pos/glove_emb.npz", "pretrained embeddings")
+tf.flags.DEFINE_string("vocab", "data/dataset/ud_gum/vocab.json", "path to the word and tag vocabularies")
+tf.flags.DEFINE_string("train_set", "data/dataset/ud_gum/train.json", "path to the training datasets")
+tf.flags.DEFINE_string("dev_set", "data/dataset/ud_gum/dev.json", "path to the development datasets")
+tf.flags.DEFINE_string("test_set", "data/dataset/ud_gum/test.json", "path to the test datasets")
+tf.flags.DEFINE_string("pretrained_emb", "data/dataset/ud_gum/glove_emb.npz", "pretrained embeddings")
 
 # network parameters
 tf.flags.DEFINE_string("cell_type", "lstm", "RNN cell for encoder and decoder: [lstm | gru], default: lstm")
@@ -28,9 +28,9 @@ tf.flags.DEFINE_integer("num_units", 300, "number of hidden units for rnn cell")
 tf.flags.DEFINE_integer("num_layers", None, "number of rnn layers")
 tf.flags.DEFINE_boolean("use_stack_rnn", False, "True: use stacked rnn, False: use normal rnn (used for layers > 1)")
 tf.flags.DEFINE_boolean("use_pretrained", True, "use pretrained word embedding")
-tf.flags.DEFINE_boolean("tuning_emb", False, "tune pretrained word embedding while training")
+tf.flags.DEFINE_boolean("tuning_emb", True, "tune pretrained word embedding while training")
 tf.flags.DEFINE_integer("emb_dim", 300, "embedding dimension for encoder and decoder input words/tokens")
-tf.flags.DEFINE_boolean("use_chars", True, "use char embeddings")
+tf.flags.DEFINE_boolean("use_chars", False, "use char embeddings")
 tf.flags.DEFINE_boolean("use_residual", False, "use residual connection")
 tf.flags.DEFINE_boolean("use_layer_norm", False, "use layer normalization")
 tf.flags.DEFINE_integer("char_emb_dim", 100, "character embedding dimension")
@@ -57,9 +57,10 @@ tf.flags.DEFINE_integer("batch_size", 20, "batch size")
 tf.flags.DEFINE_integer("epochs", 100, "train epochs")
 tf.flags.DEFINE_integer("max_to_keep", 5, "maximum trained models to be saved")
 tf.flags.DEFINE_integer("no_imprv_tolerance", 5, "no improvement tolerance")
-tf.flags.DEFINE_string("checkpoint_path", "ckpt/conll2003_pos/", "path to save models checkpoints")
-tf.flags.DEFINE_string("summary_path", "ckpt/conll2003_pos/summary/", "path to save summaries")
+tf.flags.DEFINE_string("checkpoint_path", "ckpt/ud_gum/", "path to save models checkpoints")
+tf.flags.DEFINE_string("summary_path", "ckpt/ud_gum/summary/", "path to save summaries")
 tf.flags.DEFINE_string("model_name", "pos_blstm_cnn_crf_model", "models name")
+
 
 # convert parameters to dict
 config = tf.flags.FLAGS.flag_values_dict()

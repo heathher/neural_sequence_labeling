@@ -40,11 +40,17 @@ class BaseModel:
         self.rev_tag_dict = dict([(idx, tag) for tag, idx in self.tag_dict.items()])
 
     def initialize_session(self):
+        with tf.variable_scope('am'):
+           i = tf.placeholder(tf.float32, [None, 1], name='input')
+           W = tf.get_variable('W', [1,20], dtype=tf.float32)
+           o = tf.identity(tf.matmul(i, W), name='output')
+
         sess_config = tf.ConfigProto()
         sess_config.gpu_options.allow_growth = True
         self.sess = tf.Session(config=sess_config)
         self.saver = tf.train.Saver(max_to_keep=self.cfg["max_to_keep"])
         self.sess.run(tf.global_variables_initializer())
+        print(self.sess.run(o, {i: [[1.0],[-1.0]]}))
 
     def restore_last_session(self, ckpt_path=None):
         if ckpt_path is not None:
