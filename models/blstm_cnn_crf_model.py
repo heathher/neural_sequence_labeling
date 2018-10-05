@@ -86,11 +86,11 @@ class SequenceLabelModel(BaseModel):
                 rnn_outs, *_ = bidirectional_dynamic_rnn(cell_fw, cell_bw, self.word_emb, sequence_length=self.seq_len,
                                                          dtype=tf.float32)
             rnn_outs = tf.concat(rnn_outs, axis=-1)
-            rnn_outs = tf.layers.dropout(rnn_outs, rate=self.drop_rate, training=self.is_train)
+            rnn_outs_dropout = tf.layers.dropout(rnn_outs, rate=self.drop_rate, training=self.is_train)
             if self.cfg["use_residual"]:
                 word_project = tf.layers.dense(self.word_emb, units=2 * self.cfg["num_units"], use_bias=False)
-                rnn_outs = rnn_outs + word_project
-            outputs = layer_normalize(rnn_outs) if self.cfg["use_layer_norm"] else rnn_outs
+                rnn_outs_dropout = rnn_outs_dropout + word_project
+            outputs = layer_normalize(rnn_outs_dropout) if self.cfg["use_layer_norm"] else rnn_outs_dropout
             print("rnn output shape: {}".format(outputs.get_shape().as_list()))
 
         if self.cfg["use_attention"] == "self_attention":
